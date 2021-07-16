@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
-import Geojson from 'react-native-geojson';
 
 import Europe from './Europe';
 import America from './America';
 import Asia from './Asia';
 import Africa from './Africa';
 import Oceania from './Oceania';
+
+function getLocation(latitude,longitude){
+
+}
 
 export default function Map() {
   return (

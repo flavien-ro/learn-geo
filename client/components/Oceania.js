@@ -22,6 +22,7 @@ const all_countries = Acountries.map((country, key) => {
             strokeColor="#FFFF"
             fillColor="#870078"
             strokeWidth={1}
+            onPress={() => alert('pressed ' + JSON.stringify(country.features[0].properties.name))}
         />
     )
 });
