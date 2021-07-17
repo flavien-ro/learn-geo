@@ -6,7 +6,7 @@ const initialState = {
     Oceania: false
 }
 
-const countryBorders = (state = initialState, action) => {
+const countryBoundaries = (state = initialState, action) => {
     switch (action.type) {
         case 'AFRICA':
             return {...state,
@@ -53,5 +53,5 @@ const countryBorders = (state = initialState, action) => {
     }
   }
   
-  export default countryBorders;
+  export default countryBoundaries;
   

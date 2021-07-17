@@ -64,6 +64,7 @@ const DisplayZone = (europeSelector, key, Pcountry, country, setPCountry, dispat
                 strokeColor="#FFFF"
                 fillColor="#0000ff"
                 strokeWidth={5}
+                onPress={() => dispatch({ type: 'DISPLAY', payload: country})}
             />
         )
     } else {
@@ -76,7 +77,7 @@ const DisplayZone = (europeSelector, key, Pcountry, country, setPCountry, dispat
                 onPress={() => {
                     setPCountry(country);
                     dispatch({ type: 'EUROPE' });
-                    alert('Country : ' + country.features[0].properties.name);
+                    dispatch({ type: 'DISPLAY', payload: country});
                 }}
             />
         )
@@ -89,7 +90,6 @@ export default function Europe() {
 
     //Get Europe state
     const europeSelector = useSelector(state => state.CountryReducer.Europe);
-    
     //Use for all the dispatch actions
     const dispatch = useDispatch();
 
@@ -108,7 +108,7 @@ export default function Europe() {
                                 onPress={() => {
                                     setPCountry(country);
                                     dispatch({ type: 'EUROPE' });
-                                    alert('Country : ' + country.features[0].properties.name);
+                                    dispatch({ type: 'DISPLAY', payload: country});
                                 }}
                             />
                             :

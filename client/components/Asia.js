@@ -61,6 +61,7 @@ const DisplayZone = (asiaSelector, key, Pcountry, country, setPCountry, dispatch
                 strokeColor="#FFFF"
                 fillColor="#ff0000"
                 strokeWidth={5}
+                onPress={() => dispatch({ type: 'DISPLAY', payload: country})}
             />
         )
     } else {
@@ -73,7 +74,7 @@ const DisplayZone = (asiaSelector, key, Pcountry, country, setPCountry, dispatch
                 onPress={() => {
                     setPCountry(country);
                     dispatch({ type: 'ASIA' });
-                    alert('Country after: ' + country.features[0].properties.name);
+                    dispatch({ type: 'DISPLAY', payload: country});
                 }}
             />
         )
@@ -105,7 +106,7 @@ export default function Asia() {
                                 onPress={() => {
                                     setPCountry(country);
                                     dispatch({ type: 'ASIA' });
-                                    alert('Country : ' + country.features[0].properties.name);
+                                    dispatch({ type: 'DISPLAY', payload: country});
                                 }}
                             />
                             :

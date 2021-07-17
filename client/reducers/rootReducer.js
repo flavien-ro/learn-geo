@@ -1,9 +1,11 @@
-import countryBorders from './countryBorders';
-import {combineReducers} from 'redux';
+import countryBoundaries from './countryBoundaries';
+import displayModal from './displayModal';
+import { combineReducers } from 'redux';
 
 //Combine all the sub reducers
 const rootReducer = combineReducers({
-    CountryReducer: countryBorders,
+    CountryReducer: countryBoundaries,
+    ModalReducer: displayModal,
 })
 
-export default rootReducer
+export default rootReducer;

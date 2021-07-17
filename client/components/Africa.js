@@ -4,7 +4,6 @@ import Geojson from 'react-native-geojson';
 
 import {useSelector, useDispatch} from 'react-redux';
 
-
 import Nigeria from '../countries/NGA.geo.json';
 import Ethiopia from '../countries/ETH.geo.json';
 import Egypt from '../countries/EGY.geo.json';
@@ -70,6 +69,7 @@ const DisplayZone = (africaSelector, key, Pcountry, country, setPCountry, dispat
                 strokeColor="#FFFF"
                 fillColor="#ffa500"
                 strokeWidth={5}
+                onPress={() => dispatch({ type: 'DISPLAY', payload: country})}
             />
         )
     } else {
@@ -82,7 +82,7 @@ const DisplayZone = (africaSelector, key, Pcountry, country, setPCountry, dispat
                 onPress={() => {
                     setPCountry(country);
                     dispatch({ type: 'AFRICA' });
-                    alert('Country after: ' + country.features[0].properties.name);
+                    dispatch({ type: 'DISPLAY', payload: country});
                 }}
             />
         )
@@ -92,7 +92,7 @@ const DisplayZone = (africaSelector, key, Pcountry, country, setPCountry, dispat
 export default function Africa() {
     const [Pcountry, setPCountry] = useState({"type":"FeatureCollection","features":[
         {"type":"Feature","id":"AFG","properties":{"name":"azeiojazeioazejazejioazejiazeijazazioe"}}]});
-    
+
         //Get AFRICA state
     const africaSelector = useSelector(state => state.CountryReducer.Africa);
     
@@ -114,7 +114,7 @@ export default function Africa() {
                                 onPress={() => {
                                     setPCountry(country);
                                     dispatch({ type: 'AFRICA' });
-                                    alert('Country : ' + country.features[0].properties.name);
+                                    dispatch({ type: 'DISPLAY', payload: country});
                                 }}
                             />
                             :

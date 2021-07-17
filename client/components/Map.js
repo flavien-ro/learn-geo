@@ -8,22 +8,26 @@ import Asia from './Asia';
 import Africa from './Africa';
 import Oceania from './Oceania';
 
+
+import CountryModal from './Modal';
+
 export default function Map() {
   return (
       <MapView style={styles.map}
-        minZoomLevel={-200}
+        maxZoomLevel={2}
         initialRegion={{
             latitude: 20,
             longitude: 20,
             latitudeDelta: 180,
             longitudeDelta: 180
           }}
-        >
+      >
           <Europe/>
           <America/>
           <Asia/>
           <Africa/>
           <Oceania/>
+          <CountryModal/>
       </MapView>
   );
 }

@@ -26,6 +26,7 @@ const DisplayZone = (oceaniaSelector, key, Pcountry, country, setPCountry, dispa
                 strokeColor="#FFFF"
                 fillColor="#870078"
                 strokeWidth={5}
+                onPress={() => dispatch({ type: 'DISPLAY', payload: country})}
             />
         )
     } else {
@@ -38,7 +39,7 @@ const DisplayZone = (oceaniaSelector, key, Pcountry, country, setPCountry, dispa
                 onPress={() => {
                     setPCountry(country);
                     dispatch({ type: 'OCEANIA' });
-                    alert('Country after: ' + country.features[0].properties.name);
+                    dispatch({ type: 'DISPLAY', payload: country});
                 }}
             />
         )
@@ -70,7 +71,7 @@ export default function Oceania() {
                                 onPress={() => {
                                     setPCountry(country);
                                     dispatch({ type: 'OCEANIA' });
-                                    alert('Country : ' + country.features[0].properties.name);
+                                    dispatch({ type: 'DISPLAY', payload: country});
                                 }}
                             />
                             :

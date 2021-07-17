@@ -48,6 +48,7 @@ const DisplayZone = (americaSelector, key, Pcountry, country, setPCountry, dispa
                 strokeColor="#FFFF"
                 fillColor="#ee82ee"
                 strokeWidth={5}
+                onPress={() => dispatch({ type: 'DISPLAY', payload: country})}
             />
         )
     } else {
@@ -60,7 +61,7 @@ const DisplayZone = (americaSelector, key, Pcountry, country, setPCountry, dispa
                 onPress={() => {
                     setPCountry(country);
                     dispatch({ type: 'AMERICA' });
-                    alert('Country after: ' + country.features[0].properties.name);
+                    dispatch({ type: 'DISPLAY', payload: country});
                 }}
             />
         )
@@ -92,7 +93,7 @@ export default function America() {
                                 onPress={() => {
                                     setPCountry(country);
                                     dispatch({ type: 'AMERICA' });
-                                    alert('Country : ' + country.features[0].properties.name);
+                                    dispatch({ type: 'DISPLAY', payload: country});
                                 }}
                             />
                             :
