@@ -1,7 +1,9 @@
-import * as React from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import MapView from 'react-native-maps';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import Geojson from 'react-native-geojson';
+
+import {useSelector, useDispatch} from 'react-redux';
+
 
 // import Europe countries json coordonates
 
@@ -53,22 +55,69 @@ const Acountries = [Russia, France, Germany, England, Italia, Spain, Ukraine, Po
     Finland, Slovakia, Norway, Ireland, Croatia, Moldova, BosniaHerzegovina, Albania, Lituania, NorthMacedonia, Slovenia,
     Latvia, Estonia, Montenegro, Luxembourg, Malta, Iceland, Andorra, Monaco, Kosovo];
 
-const all_countries = Acountries.map((country, key) => {
-    return (
-        <Geojson key={key}
-            geojson={country} // geojson of the countries you want to highlight
-            strokeColor="#FFFF"
-            fillColor="#0000ff"
-            strokeWidth={1}
-            onPress={() => alert('pressed ' + JSON.stringify(country.features[0].properties.name))}
+
+const DisplayZone = (europeSelector, key, Pcountry, country, setPCountry, dispatch) => {
+    if (europeSelector === true) {
+        return (
+            <Geojson key={key}
+                geojson={Pcountry} // geojson of the countries you want to highlight
+                strokeColor="#FFFF"
+                fillColor="#0000ff"
+                strokeWidth={5}
             />
-    )
-});
+        )
+    } else {
+        return (
+            <Geojson key={key}
+                geojson={country} // geojson of the countries you want to highlight
+                strokeColor="#FFFF"
+                fillColor="#0000ff"
+                strokeWidth={1}
+                onPress={() => {
+                    setPCountry(country);
+                    dispatch({ type: 'EUROPE' });
+                    alert('Country : ' + country.features[0].properties.name);
+                }}
+            />
+        )
+    }
+}
 
 export default function Europe() {
+    const [Pcountry, setPCountry] = useState({"type":"FeatureCollection","features":[
+        {"type":"Feature","id":"AFG","properties":{"name":"azeiojazeioazejazejioazejiazeijazazioe"}}]});
+
+    //Get Europe state
+    const europeSelector = useSelector(state => state.CountryReducer.Europe);
+    
+    //Use for all the dispatch actions
+    const dispatch = useDispatch();
+
     return (
       <View>
-          {all_countries}
+          {
+              Acountries.map((country, key) => {
+                return (
+                    <View key={key}>
+                         {country.features[0].properties.name !== Pcountry.features[0].properties.name ?
+                                <Geojson key={key}
+                                geojson={country} // geojson of the countries you want to highlight
+                                strokeColor="#FFFF"
+                                fillColor="#0000ff"
+                                strokeWidth={1}
+                                onPress={() => {
+                                    setPCountry(country);
+                                    dispatch({ type: 'EUROPE' });
+                                    alert('Country : ' + country.features[0].properties.name);
+                                }}
+                            />
+                            :
+                                DisplayZone(europeSelector, key, Pcountry, country, setPCountry, dispatch)
+                         }
+                    </View>
+                )
+            })
+          }
       </View>
     );
 }

@@ -8,10 +8,6 @@ import Asia from './Asia';
 import Africa from './Africa';
 import Oceania from './Oceania';
 
-function getLocation(latitude,longitude){
-
-}
-
 export default function Map() {
   return (
       <MapView style={styles.map}

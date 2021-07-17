@@ -1,6 +1,9 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import {View} from 'react-native';
 import Geojson from 'react-native-geojson';
+
+import {useSelector, useDispatch} from 'react-redux';
+
 
 import Nigeria from '../countries/NGA.geo.json';
 import Ethiopia from '../countries/ETH.geo.json';
@@ -59,23 +62,68 @@ const Acountries = [Nigeria, Ethiopia, Egypt, Congo, Tanzania, SouthAfrica, Keny
     Gambia, Mauritania, CFA, Liberia, Libya, SierraLeone, Madagascar, COD, Swaziland, Guinea, Botswana, Eritrea, GuineaBissau,
     WesternSahara, Djibouti];
 
-const all_countries = Acountries.map((country, key) => {
-    return (
-        <Geojson key={key}
-            geojson={country} // geojson of the countries you want to highlight
-            strokeColor="#FFFF"
-            fillColor="#ffa500"
-            strokeWidth={1}
-            onPress={() => alert('pressed ' + JSON.stringify(country.features[0].properties.name))}
-        />
-    )
-});
-
+const DisplayZone = (africaSelector, key, Pcountry, country, setPCountry, dispatch) => {
+    if (africaSelector === true) {
+        return (
+            <Geojson key={key}
+                geojson={Pcountry} // geojson of the countries you want to highlight
+                strokeColor="#FFFF"
+                fillColor="#ffa500"
+                strokeWidth={5}
+            />
+        )
+    } else {
+        return (
+            <Geojson key={key}
+                geojson={country} // geojson of the countries you want to highlight
+                strokeColor="#FFFF"
+                fillColor="#ffa500"
+                strokeWidth={1}
+                onPress={() => {
+                    setPCountry(country);
+                    dispatch({ type: 'AFRICA' });
+                    alert('Country after: ' + country.features[0].properties.name);
+                }}
+            />
+        )
+    }
+}
+    
 export default function Africa() {
+    const [Pcountry, setPCountry] = useState({"type":"FeatureCollection","features":[
+        {"type":"Feature","id":"AFG","properties":{"name":"azeiojazeioazejazejioazejiazeijazazioe"}}]});
+    
+        //Get AFRICA state
+    const africaSelector = useSelector(state => state.CountryReducer.Africa);
+    
+        //Use for all the dispatch actions
+    const dispatch = useDispatch();
+
     return (
-      <View>
-          {all_countries}
-      </View>
+        <View>
+            {
+                Acountries.map((country, key) => {
+                return (
+                    <View key={key}>
+                            {country.features[0].properties.name !== Pcountry.features[0].properties.name ?
+                                <Geojson key={key}
+                                geojson={country} // geojson of the countries you want to highlight
+                                strokeColor="#FFFF"
+                                fillColor="#ffa500"
+                                strokeWidth={1}
+                                onPress={() => {
+                                    setPCountry(country);
+                                    dispatch({ type: 'AFRICA' });
+                                    alert('Country : ' + country.features[0].properties.name);
+                                }}
+                            />
+                            :
+                                DisplayZone(africaSelector, key, Pcountry, country, setPCountry, dispatch)
+                            }
+                    </View>
+                )
+            })
+            }
+        </View>
     );
 }
-  

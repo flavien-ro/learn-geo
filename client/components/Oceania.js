@@ -1,7 +1,9 @@
-import * as React from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import MapView from 'react-native-maps';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import Geojson from 'react-native-geojson';
+
+
+import {useSelector, useDispatch} from 'react-redux';
 
 // import Oceania countries json coordonates
 
@@ -15,22 +17,69 @@ import Vanuatu from '../countries/VUT.geo.json';
 
 const Acountries = [Australia, PapuaGuinea, NewZeland, NewCaledonia, Solomon, Fiji, Vanuatu];
 
-const all_countries = Acountries.map((country, key) => {
-    return (
-        <Geojson key={key}
-            geojson={country} // geojson of the countries you want to highlight
-            strokeColor="#FFFF"
-            fillColor="#870078"
-            strokeWidth={1}
-            onPress={() => alert('pressed ' + JSON.stringify(country.features[0].properties.name))}
-        />
-    )
-});
+
+const DisplayZone = (oceaniaSelector, key, Pcountry, country, setPCountry, dispatch) => {
+    if (oceaniaSelector === true) {
+        return (
+            <Geojson key={key}
+                geojson={Pcountry} // geojson of the countries you want to highlight
+                strokeColor="#FFFF"
+                fillColor="#870078"
+                strokeWidth={5}
+            />
+        )
+    } else {
+        return (
+            <Geojson key={key}
+                geojson={country} // geojson of the countries you want to highlight
+                strokeColor="#FFFF"
+                fillColor="#870078"
+                strokeWidth={1}
+                onPress={() => {
+                    setPCountry(country);
+                    dispatch({ type: 'OCEANIA' });
+                    alert('Country after: ' + country.features[0].properties.name);
+                }}
+            />
+        )
+    }
+}
 
 export default function Oceania() {
+    const [Pcountry, setPCountry] = useState({"type":"FeatureCollection","features":[
+        {"type":"Feature","id":"AFG","properties":{"name":"azeiojazeioazejazejioazejiazeijazazioe"}}]});
+    
+    //Get OCEANIA state
+    const oceaniaSelector = useSelector(state => state.CountryReducer.Oceania);
+    
+    //Use for all the dispatch actions
+    const dispatch = useDispatch();
+    
     return (
       <View>
-          {all_countries}
+          {
+              Acountries.map((country, key) => {
+                return (
+                    <View key={key}>
+                         {country.features[0].properties.name !== Pcountry.features[0].properties.name ?
+                                <Geojson key={key}
+                                geojson={country} // geojson of the countries you want to highlight
+                                strokeColor="#FFFF"
+                                fillColor="#870078"
+                                strokeWidth={1}
+                                onPress={() => {
+                                    setPCountry(country);
+                                    dispatch({ type: 'OCEANIA' });
+                                    alert('Country : ' + country.features[0].properties.name);
+                                }}
+                            />
+                            :
+                                DisplayZone(oceaniaSelector, key, Pcountry, country, setPCountry, dispatch)
+                         }
+                    </View>
+                )
+            })
+          }
       </View>
     );
 }

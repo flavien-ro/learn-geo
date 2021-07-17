@@ -1,9 +1,11 @@
-import * as React from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View } from 'react-native';
 import Geojson from 'react-native-geojson';
 
+import {useSelector, useDispatch} from 'react-redux';
+
 import China from '../countries/CHN.geo.json';
-import Japan from '../countries/JPN.geo.json';
+import Japan from '../countries/japan.json';
 import India from '../countries/IND.geo.json';
 import Indonesia from '../countries/IDN.geo.json';
 import Pakistan from '../countries/PAK.geo.json';
@@ -51,23 +53,68 @@ const Acountries = [China, India, Indonesia, Pakistan, Bangladesh, PHL, Vietnam,
     Kazakhstan, Cambodia, Jordan, Azerbaijan, UnitedArabEmirates, Tajikistan, Israel, Syria, Brunei, Qatar,
     Armenia, Mongolia, Laos, Lebanon, Kyrgyzstan, Turkmenistan, Oman, Kuwait, Georgia, Bhutan, Burma, Japan];
 
-const all_countries = Acountries.map((country, key) => {
-    return (
-        <Geojson key={key}
-            geojson={country} // geojson of the countries you want to highlight
-            strokeColor="#FFFF"
-            fillColor="#ff0000"
-            strokeWidth={1}
-            onPress={() => alert('pressed ' + JSON.stringify(country.features[0].properties.name))}
-        />
-    )
-});
+const DisplayZone = (asiaSelector, key, Pcountry, country, setPCountry, dispatch) => {
+    if (asiaSelector === true) {
+        return (
+            <Geojson key={key}
+                geojson={Pcountry} // geojson of the countries you want to highlight
+                strokeColor="#FFFF"
+                fillColor="#ff0000"
+                strokeWidth={5}
+            />
+        )
+    } else {
+        return (
+            <Geojson key={key}
+                geojson={country} // geojson of the countries you want to highlight
+                strokeColor="#FFFF"
+                fillColor="#ff0000"
+                strokeWidth={1}
+                onPress={() => {
+                    setPCountry(country);
+                    dispatch({ type: 'ASIA' });
+                    alert('Country after: ' + country.features[0].properties.name);
+                }}
+            />
+        )
+    }
+}
 
-export default function America() {
+export default function Asia() {
+    const [Pcountry, setPCountry] = useState({"type":"FeatureCollection","features":[
+        {"type":"Feature","id":"AFG","properties":{"name":"azeiojazeioazejazejioazejiazeijazazioe"}}]});
+    
+        //Get ASIA state
+        const asiaSelector = useSelector(state => state.CountryReducer.Asia);
+
+        //Use for all the dispatch actions
+        const dispatch = useDispatch();
+    
     return (
       <View>
-          {all_countries}
+          {
+              Acountries.map((country, key) => {
+                return (
+                    <View key={key}>
+                         {country.features[0].properties.name !== Pcountry.features[0].properties.name ?
+                                <Geojson key={key}
+                                geojson={country} // geojson of the countries you want to highlight
+                                strokeColor="#FFFF"
+                                fillColor="#ff0000"
+                                strokeWidth={1}
+                                onPress={() => {
+                                    setPCountry(country);
+                                    dispatch({ type: 'ASIA' });
+                                    alert('Country : ' + country.features[0].properties.name);
+                                }}
+                            />
+                            :
+                                DisplayZone(asiaSelector, key, Pcountry, country, setPCountry, dispatch)
+                         }
+                    </View>
+                )
+            })
+          }
       </View>
     );
 }
-  
