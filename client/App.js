@@ -1,29 +1,40 @@
 import * as React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
-import Map from './components/Map'
+import Home from './components/Home';
+import Map from './components/Map';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import rootReducer from './reducers/rootReducer'
 
+
+
 const store = createStore(rootReducer)
+
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <Provider store={store}>
-        <View style={styles.container}>
-          <Map/>
-        </View>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+              <Stack.Screen name="Atlas" component={Map}  screenOptions={{
+                headerStyle: {
+                  backgroundColor: 'white',
+                },
+                headerTintColor: '#0066ff',
+                headerTitleStyle: {
+                  display: 'none'
+                },
+            }}/>
+            </Stack.Navigator>
+
+          </NavigationContainer>
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -1,6 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
+import {useSelector, useDispatch} from 'react-redux';
+
+import { Ionicons } from '@expo/vector-icons';
 
 import Europe from './Europe';
 import America from './America';
@@ -36,5 +39,14 @@ const styles = StyleSheet.create({
   map: {
     minWidth: Dimensions.get('window').width,
     minHeight: Dimensions.get('window').height,
+  },
+  goBack: {
+    position: 'absolute',
+    top: 30,
+    left: 15,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 25
   },
 });
