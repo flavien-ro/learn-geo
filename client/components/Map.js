@@ -40,13 +40,4 @@ const styles = StyleSheet.create({
     minWidth: Dimensions.get('window').width,
     minHeight: Dimensions.get('window').height,
   },
-  goBack: {
-    position: 'absolute',
-    top: 30,
-    left: 15,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 25
-  },
 });

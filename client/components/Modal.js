@@ -6,6 +6,16 @@ import { SvgCssUri } from 'react-native-svg';
 import Modal from 'react-native-modal';
 import Flag from 'react-native-flags-kit';
 
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  Poppins_700Bold,
+} from '@expo-google-fonts/poppins';
+
+import {
+    Montserrat_400Regular,
+  } from '@expo-google-fonts/montserrat';
+  
 function numberWithSpaces(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
@@ -51,13 +61,14 @@ export default function CountryModal(props) {
         if (displayModal.isVisible) {
             var config = {
                 method: 'get',
-                url: 'https://restcountries.eu/rest/v2/alpha/' + displayModal.countryInfo.features[0].id,
+                url: 'https://restcountries.com/v3.1/alpha/' + displayModal.countryInfo.features[0].id,
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 };
                 axios(config)
                 .then(function (response) {
+                    // alert(JSON.stringify(response.data[0].currencies));
                     setInfoCountry(response);
                 })
                 .catch(function (error) {
@@ -65,100 +76,108 @@ export default function CountryModal(props) {
                 });
         }
     }, [displayModal.isVisible]);
-
-    return (
-        <View>
-            {displayModal.isVisible &&
-                <View style={{alignItems: 'left', minWidth: Dimensions.get('window').width}}>
-                    <Modal
-                        isVisible={true}
-                        onSwipeComplete={() => {
-                            dispatch({ type: 'HIDE', payload: {}});
-                        }}
-                        backdropOpacity={.5}
-                        useNativeDriverForBackdrop
-                        scrollTo={handleScrollTo}
-                        scrollOffset={scrollOffset}
-                        scrollOffsetMax={400 - 300}
-                        propagateSwipe={true}
-                        onBackdropPress={() => {
-                            dispatch({ type: 'HIDE', payload: {}});
-                        }}
-                    >
-                        {error === null && isEmpty(infoCountry) === false ?
-                            <View style={styles.modal}>
-                                <ScrollView
-                                    ref={scrollViewRef}
-                                    onScroll={(event) => setScrollOffset(event.nativeEvent.contentOffset.y)}
-                                    scrollEventThrottle={16}>
-                                <Pressable onPress={() => dispatch({ type: 'HIDE', payload: {}})}>
-                                    <Text style={{color: 'black', textAlign: 'left', top: 20, left: 30}}>Hide Modal</Text>
-                                </Pressable>
-                                <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', top: 40}}>
-                                    <Text style={{flex: 1, maxWidth: 250, fontSize: 24, fontWeight: 'bold'}} numberOfLines={2} ellipsizeMode='tail'>
-                                        {infoCountry.data.name}
-                                    </Text>
-                                    <Flag
-                                        code={displayModal.countryInfo.features[0].id.slice(0, 2)}
-                                        size={64}
-                                        />
-                                </View>
-                                <View style={styles.allCards}>
-                                    <View style={styles.card}>
-                                        <Text>
-                                            Capital :
-                                        </Text>
-                                        <Text style={{flex: 1, maxWidth: 200}} numberOfLines={1} ellipsizeMode='tail'>
-                                            {infoCountry.data.capital}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.card}>
-                                        <Text>
-                                            Population :
-                                        </Text>
-                                        <Text style={{flex: 1, maxWidth: 200}} numberOfLines={1} ellipsizeMode='tail'>
-                                            {numFormatter(parseInt(infoCountry.data.population))}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.card}>
-                                        <Text>
-                                            Region :
-                                        </Text>
-                                        <Text style={{flex: 1, maxWidth: 200}} numberOfLines={1} ellipsizeMode='tail'>
-                                            {infoCountry.data.subregion}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.lastCard}>
-                                        <Text>
-                                        Language :
-                                        </Text>
-                                        <Text style={{flex: 1, maxWidth: 200}} numberOfLines={1} ellipsizeMode='tail'>
-                                            {infoCountry.data.languages[0].name}
-                                        </Text>
-                                    </View>
-                                </View>
-                                </ScrollView>
-                            </View>
-                            :
+    let [fontsLoaded] = useFonts({
+        Poppins_700Bold,
+        Montserrat_400Regular
+      });
+    
+    if (!fontsLoaded) {
+        return <AppLoading />;
+    } else {
+        return (
+            <View>
+                {displayModal.isVisible &&
+                    <View style={{alignItems: 'left', minWidth: Dimensions.get('window').width}}>
+                        <Modal
+                            isVisible={true}
+                            onSwipeComplete={() => {
+                                dispatch({ type: 'HIDE', payload: {}});
+                            }}
+                            backdropOpacity={.5}
+                            useNativeDriverForBackdrop
+                            scrollTo={handleScrollTo}
+                            scrollOffset={scrollOffset}
+                            scrollOffsetMax={400 - 300}
+                            propagateSwipe={true}
+                            onBackdropPress={() => {
+                                dispatch({ type: 'HIDE', payload: {}});
+                            }}
+                        >
+                            {error === null && isEmpty(infoCountry) === false ?
                                 <View style={styles.modal}>
-                                    <Pressable onPress={() => {
-                                        dispatch({ type: 'HIDE'});
-                                        setError(null);
-                                    }}>
-                                        <Text style={{color: 'black', textAlign: 'left', top: 20, left: 30}}>Hide Modal</Text>
+                                    <ScrollView
+                                        ref={scrollViewRef}
+                                        onScroll={(event) => setScrollOffset(event.nativeEvent.contentOffset.y)}
+                                        scrollEventThrottle={16}>
+                                    <Pressable onPress={() => dispatch({ type: 'HIDE', payload: {}})}>
+                                        <Text style={{color: 'black', fontFamily: 'Poppins_700Bold',textAlign: 'left', top: 20, left: 30}}>Hide Modal</Text>
                                     </Pressable>
-                                    <Text style={{color: 'black', textAlign: 'center', top: 100, left: 30}}>
-                                        No data found ...
-                                    </Text>
+                                    <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', top: 40}}>
+                                        <Text style={{flex: 1, maxWidth: 250, fontSize: 20, fontFamily: 'Poppins_700Bold'}} numberOfLines={2} ellipsizeMode='tail'>
+                                            {infoCountry.data[0].name.common}
+                                        </Text>
+                                        <Flag
+                                            code={displayModal.countryInfo.features[0].id.slice(0, 2)}
+                                            size={64}
+                                            />
+                                    </View>
+                                    <View style={styles.allCards}>
+                                        <View style={styles.card}>
+                                            <Text style={{fontFamily: 'Poppins_700Bold'}}>
+                                                Capital :
+                                            </Text>
+                                            <Text style={{flex: 1, maxWidth: 200, fontFamily: 'Montserrat_400Regular'}} numberOfLines={1} ellipsizeMode='tail'>
+                                                {infoCountry.data[0].capital[0]}
+                                            </Text>
+                                        </View>
+                                        <View style={styles.card}>
+                                            <Text style={{fontFamily: 'Poppins_700Bold'}}>
+                                                Population :
+                                            </Text>
+                                            <Text style={{flex: 1, maxWidth: 200, fontFamily: 'Montserrat_400Regular'}} numberOfLines={1} ellipsizeMode='tail'>
+                                                {numFormatter(parseInt(infoCountry.data[0].population))}
+                                            </Text>
+                                        </View>
+                                        <View style={styles.card}>
+                                            <Text style={{fontFamily: 'Poppins_700Bold'}}>
+                                                Region :
+                                            </Text>
+                                            <Text style={{flex: 1, maxWidth: 200, fontFamily: 'Montserrat_400Regular'}} numberOfLines={1} ellipsizeMode='tail'>
+                                                {infoCountry.data[0].subregion}
+                                            </Text>
+                                        </View>
+                                        {/* <View style={styles.lastCard}>
+                                            <Text>
+                                            Language :
+                                            </Text>
+                                            <Text style={{flex: 1, maxWidth: 200}} numberOfLines={1} ellipsizeMode='tail'>
+                                                {infoCountry.data.languages[0].name}
+                                            </Text>
+                                        </View> */}
+                                    </View>
+                                    </ScrollView>
                                 </View>
-                        }
+                                :
+                                    <View style={styles.modal}>
+                                        <Pressable onPress={() => {
+                                            dispatch({ type: 'HIDE'});
+                                            setError(null);
+                                        }}>
+                                            <Text style={{color: 'black', textAlign: 'left', top: 20, left: 30}}>Hide Modal</Text>
+                                        </Pressable>
+                                        <Text style={{color: 'black', textAlign: 'center', top: 100, left: 30}}>
+                                            No data found ...
+                                        </Text>
+                                    </View>
+                            }
 
-                    </Modal>
-                </View>
-            }
-        </View>
-    );
-  };
+                        </Modal>
+                    </View>
+                }
+            </View>
+        );
+    };
+    }
   
   const styles = StyleSheet.create({
     modal : {
